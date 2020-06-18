@@ -27,7 +27,7 @@ class DashBoard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 90),
+            SizedBox(height: 80),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -48,7 +48,7 @@ class DashBoard extends StatelessWidget {
             _buttonWidget(
               context: context,
               title: "Using ScopeModel",
-              screen: ScopeModelEx(),
+              screen: ScopedModelEx(),
             ),
             _buttonWidget(
               context: context,
@@ -56,7 +56,9 @@ class DashBoard extends StatelessWidget {
               screen: ProviderEx(),
             ),
             _buttonWidget(
-                context: context, title: "Using Bloc", screen: BLocEx())
+                context: context, title: "Using Bloc", screen: BLocEx()),
+
+            // info(),
           ],
         ),
       ),
