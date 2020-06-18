@@ -87,7 +87,8 @@ class _AppRootWidget extends StatelessWidget {
           Text('(root widget)'),
           // Text('${myState.counter}'),
           Consumer<Counter>(//consumers are the particular listener or descenders
-            builder:(context,myState,child)=> Text('${myState.counter}')),
+            builder:(context,myState,child)=> Text('${myState.counter}',
+            style:Theme.of(context).textTheme.headline4 ,)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[

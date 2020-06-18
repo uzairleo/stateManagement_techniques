@@ -283,6 +283,144 @@ class CardChildWidget extends StatelessWidget {
 
 ''',
 '''
+import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:statemanagement_techniques/Code/CodeList.dart';
+import 'package:statemanagement_techniques/CodeScreen/codeScreen.dart';
+
+
+class ScopedModelEx extends StatelessWidget {
+  const ScopedModelEx({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Scoped_Model"),
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.code),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => (CodeScreen(codeList[2]))));
+                })
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: _MyDemoApp(),
+        ),
+      );
+  }
+}
+
+// ###1. Define a state class, extending from scoped_model.Model.
+class _MyState extends Model {
+  int _counter = 0;
+
+  int get counterValue => _counter;
+
+  void incrementCounter() {
+    _counter++;
+    // Must add notifyListeners() when UI need to be changed.
+    // This will notify ALL it's descendants in the widget tree.
+    notifyListeners();
+  }
+
+  void decrementCounter() {
+    _counter--;
+    notifyListeners();
+  }
+}
+
+class _MyDemoApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: <Widget>[
+        Text(
+            "ScopedModel allows efficient sharing/updating of app's state from "
+            "children widgets down the widgets tree.\n\n"
+            "In this example, the app's root widget is a ScopedModel, "
+            "so it's state is shared to the two 'CounterAndButtons' children"
+            " widgets below. \n\n"
+            "Clicking on child widget's button would update the MyStateModel "
+            "of root widget.\n"),
+        // ###2. Put the ScopedModel at the root of the widget tree, so that all
+        // children widget can access the state.
+        ScopedModel<_MyState>(
+          model: _MyState(),
+          child: _AppRootWidget(),
+        ),
+      ],
+    );
+  }
+}
+
+class _AppRootWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ScopedModelDescendant<_MyState>(
+     rebuildOnChange: true,
+     builder:  (context, child, model)=>Card(
+        elevation: 4.0,
+        child: Column(
+          children: <Widget>[
+            Text('(root widget)'),
+            Text('{model.counterValue}',
+            style: Theme.of(context).textTheme.headline4,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                _CounterAndButton(),
+                _CounterAndButton(),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CounterAndButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // ###3. Wrap children widgets ScopedModelDescendant widget to access the
+    // associated state model.
+    return ScopedModelDescendant<_MyState>(
+      // Note: Set `rebuildOnChange` to false if the current widget doesn't
+      // need updating. E.g. When "add-to-cart" button is pressed, the app's
+      // state is updated, but "product-details" page doesn't need updating.
+      rebuildOnChange: true,
+      builder: (context, child, model) => Card(
+        margin: EdgeInsets.all(4.0).copyWith(top: 32.0, bottom: 32.0),
+        color: Colors.white70,
+        child: Column(
+          children: <Widget>[
+            Text('(child widget)'),
+            Text(
+              '{model.counterValue}',
+              style: Theme.of(context).textTheme.headline4,
+            ),
+            ButtonBar(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () => model.incrementCounter(),
+                ),
+                IconButton(
+                  icon: Icon(Icons.remove),
+                  onPressed: () => model.decrementCounter(),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
 ''',
 '''
 import 'package:flutter/material.dart';
@@ -298,7 +436,7 @@ class ProviderEx extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<Counter>(
       //  builder: (context)=>Counter(),
-      create: (_) => Counter(),
+      create: (context) => Counter(),
 
       child: Scaffold(
         appBar: AppBar(
@@ -321,7 +459,6 @@ class ProviderEx extends StatelessWidget {
   }
 }
 
-// ###1. Define a state class, extending from ChangeNotifier.
 class Counter with ChangeNotifier {
   int counter = 0;
 
@@ -365,13 +502,17 @@ class __MyDemoAppState extends State<_MyDemoApp> {
 class _AppRootWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final counter = Provider.of<Counter>(context);
+    //it will completely rebuild the Card or this widget suppose we just want to rebuild the only listener text then we use listener false and used consumer
+    // final myState = Provider.of<Counter>(context,listen: false);
+    // final myState = Provider.of<Counter>(context);
     return Card(
       elevation: 4.0,
       child: Column(
         children: <Widget>[
           Text('(root widget)'),
-          Text('{counter.counter}'),
+          // Text('{myState.counter}'),
+          Consumer<Counter>(//consumers are the particular listener or descenders
+            builder:(context,myState,child)=> Text('{myState.counter}')),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -388,7 +529,7 @@ class _AppRootWidget extends StatelessWidget {
 class _CounterAndButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final counter = Provider.of<Counter>(context);
+    final myState = Provider.of<Counter>(context);
     return Card(
       margin: EdgeInsets.all(4.0).copyWith(top: 32.0, bottom: 32.0),
       color: Colors.white70,
@@ -396,19 +537,18 @@ class _CounterAndButton extends StatelessWidget {
         children: <Widget>[
           Text('(child widget)'),
           Text(
-            '{counter.counter}',
+            '{myState.counter}',
             style: Theme.of(context).textTheme.headline4,
           ),
           ButtonBar(
             children: <Widget>[
               IconButton(
                 icon: Icon(Icons.add),
-                onPressed: () => counter.incrementCounter(),
+                onPressed: () => myState.incrementCounter(),
               ),
-              // Way 2 to get state up the tree: wrap a Consumer widget.
               IconButton(
                 icon: Icon(Icons.remove),
-                onPressed: () => counter.decrementCounter(),
+                onPressed: () => myState.decrementCounter(),
               )
             ],
           )
