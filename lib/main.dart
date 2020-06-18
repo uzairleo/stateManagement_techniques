@@ -103,10 +103,10 @@ class DashBoard extends StatelessWidget {
   }
 
   Future<void> launchUrl(String url) async {
-    if ( await canLaunch(url)) {
+    if (await canLaunch(url)) {
       await launch(
         url,
-        forceWebView: true,
+        // forceWebView: true,
       );
     } else {
       throw "Unable to load url";
