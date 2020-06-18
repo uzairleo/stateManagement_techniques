@@ -1,6 +1,10 @@
 # statemanagement_techniques
 
-A new Flutter project.
+A new Flutter project that demonstrate building same user interface using different STATE_MANAGEMENT_ARCHITECTURES with code side by side at the same time
+
+![](state.gif)
+
+
 
 ## Getting Started
 
