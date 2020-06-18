@@ -9,7 +9,9 @@ class _BLocExState extends State<BLocEx> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Text("Coming Soon......"),),
+      body: Center(child: Text("Coming Soon......😃\nstill learning",
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.headline6,),),
     );
   }
 }
