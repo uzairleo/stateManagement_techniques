@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:statemanagement_techniques/Code/CodeList.dart';
+import 'package:statemanagement_techniques/CodeScreen/codeScreen.dart';
 
 class SimpleStateMangEx extends StatelessWidget {
   @override
@@ -6,7 +8,11 @@ class SimpleStateMangEx extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("SimpleState_Manag_Example"),
-        actions: <Widget>[IconButton(icon: Icon(Icons.code), onPressed: () {})],
+        actions: <Widget>[IconButton(icon: Icon(Icons.code), onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context)=>(CodeScreen(codeList[0]))
+          ));
+        })],
       ),
       body: RootWidget(),
     );
@@ -34,7 +40,7 @@ class _RootWidgetState extends State<RootWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -46,7 +52,10 @@ class _RootWidgetState extends State<RootWidget> {
             "when we are coding a large application then its "
             "will a mess or a headache for a person to presist"
             " the actual state so i recommend for basics its "
-            "good to used this or go with this methods.\n",
+            "good to used this or go with this methods.Which is "
+            "nothing just passing a state data to child widgets.\n\n"
+            "But for large app i recommend one must used provider or "
+            "scope model to maintain the code Quality.",
             textAlign: TextAlign.justify,
           ),
         ),
