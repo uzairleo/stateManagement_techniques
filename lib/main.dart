@@ -4,6 +4,7 @@ import 'package:statemanagement_techniques/Screens/InheritedWidget_ex.dart';
 import 'package:statemanagement_techniques/Screens/Provider_ex.dart';
 import 'package:statemanagement_techniques/Screens/ScopeModel_ex.dart';
 import 'package:statemanagement_techniques/Screens/SimpleStateManag_ex.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(StatemangExample());
@@ -57,8 +58,7 @@ class DashBoard extends StatelessWidget {
             ),
             _buttonWidget(
                 context: context, title: "Using Bloc", screen: BLocEx()),
-
-            // info(),
+            info(context),
           ],
         ),
       ),
@@ -85,5 +85,32 @@ class DashBoard extends StatelessWidget {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => (navigatedScreen),
     ));
+  }
+
+  info(var context) {
+    return GestureDetector(
+      onTap: () {
+        launchUrl("https://github.com/uzairleo/stateManagement_techniques");
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0).copyWith(top: 60),
+        child: Text(
+          "@uzairLeo 👆",
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+      ),
+    );
+  }
+
+  Future<void> launchUrl(String url) async {
+    if ( await canLaunch(url)) {
+      await launch(
+        url,
+        forceWebView: true,
+      );
+    } else {
+      throw "Unable to load url";
+      // print("Unable to load url");
+    }
   }
 }
