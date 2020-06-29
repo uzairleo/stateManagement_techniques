@@ -56,9 +56,14 @@ class DashBoard extends StatelessWidget {
               title: "Using Provider",
               screen: ProviderEx(),
             ),
+            
+            _buttonWidget(
+                context: context, title: "Using MVVM", screen: MvvmEx()),
+            info(context),
             _buttonWidget(
                 context: context, title: "Using Bloc", screen: BLocEx()),
             info(context),
+
           ],
         ),
       ),
