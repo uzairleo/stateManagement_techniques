@@ -110,7 +110,7 @@ class DashBoard extends StatelessWidget {
     if (await canLaunch(url)) {
       await launch(
         url,
-        // forceWebView: true,
+        forceWebView: true,
       );
     } else {
       throw "Unable to load url";
