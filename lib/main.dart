@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:statemanagement_techniques/Screens/BLoc_example.dart';
 import 'package:statemanagement_techniques/Screens/InheritedWidget_ex.dart';
+import 'package:statemanagement_techniques/Screens/MVVM_Architecture/CounterView.dart';
 import 'package:statemanagement_techniques/Screens/Provider_ex.dart';
 import 'package:statemanagement_techniques/Screens/ScopeModel_ex.dart';
 import 'package:statemanagement_techniques/Screens/SimpleStateManag_ex.dart';
@@ -28,7 +29,7 @@ class DashBoard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 80),
+            SizedBox(height: 40),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -56,14 +57,12 @@ class DashBoard extends StatelessWidget {
               title: "Using Provider",
               screen: ProviderEx(),
             ),
-            
             _buttonWidget(
-                context: context, title: "Using MVVM", screen: MvvmEx()),
-            info(context),
+                context: context, title: "Using MVVM", screen: CounterView()),
+            
             _buttonWidget(
                 context: context, title: "Using Bloc", screen: BLocEx()),
             info(context),
-
           ],
         ),
       ),
@@ -98,7 +97,7 @@ class DashBoard extends StatelessWidget {
         launchUrl("https://github.com/uzairleo/stateManagement_techniques");
       },
       child: Padding(
-        padding: const EdgeInsets.all(8.0).copyWith(top: 60),
+        padding: const EdgeInsets.all(8.0).copyWith(top: 33),
         child: Text(
           "@uzairLeo 👆",
           style: Theme.of(context).textTheme.bodyText1,
